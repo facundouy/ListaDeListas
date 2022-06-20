@@ -1,23 +1,35 @@
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { Routes, Route } from "react-router-dom";
-
-import Navbar from "./components/Navbar.jsx";
-import Home from "./components/Home.jsx";
+import NewItem from "./components/NewItem";
+import ShoppingList from "./components/ShoppingList";
+import HackList from "./components/HackList";
+import NewList from "./components/NewList";
 
 function App() {
   return (
-    <Routes>
-      <Route
-        path="/"
-        element={
-          <>
-            <Navbar />
-            <Home />
-          </>
-        }
-      />
-    </Routes>
+    <div className="App container">
+      <Routes>
+        <Route
+          path="/"
+          element={
+            <>
+              <HackList />
+              <NewList />
+            </>
+          }
+        />
+        <Route
+          path="list/:id"
+          element={
+            <>
+              <NewItem />
+              <ShoppingList />
+            </>
+          }
+        />
+      </Routes>
+    </div>
   );
 }
 
