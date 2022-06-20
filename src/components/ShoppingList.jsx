@@ -1,48 +1,54 @@
 import { useSelector, useDispatch } from "react-redux";
-import {
-  buyItemCreator,
-  deleteItemCreator,
-} from "../redux/shoppingListActions";
+import { useParams } from "react-router-dom";
+import { useState } from "react";
+import { deleteItem } from "../redux/ListsSlice";
 
 function ShoppingList({ onClick }) {
-  const shoppingList = useSelector((state) => state.shoppingList);
-  console.log(shoppingList);
-
+  const [itemId, setItemId] = useState("");
+  console.log(itemId);
+  const params = useParams();
   const dispatch = useDispatch();
+  const lists = useSelector((state) => state.Lists);
+  console.log(lists);
 
-  const deleteItem = (item) => {
-    dispatch(deleteItemCreator(item));
-  };
-
-  const handleClick = (itemId) => {
-    dispatch(buyItemCreator(itemId));
+  const handleClick = (itemId, listId) => {
+    dispatch(deleteItem(itemId, listId));
   };
 
   return (
     <div>
-      <ul onClick={onClick}>
-        {shoppingList.map((item) => {
-          return (
-            <li
-              key={item.id}
-              className={
-                item.isBought
-                  ? `text-decoration-line-through list-unstyled m-3`
-                  : "list-unstyled m-3"
-              }
-            >
-              <input type="checkbox" onClick={() => handleClick(item.id)} />{" "}
-              {item.name}{" "}
-              <button
-                className="btn btn-danger"
-                onClick={(event) => {
-                  deleteItem(item);
-                }}
-              >
-                Eliminar
-              </button>
-            </li>
-          );
+      <ul className="list-unstyled">
+        {lists.map((list) => {
+          if (list.id === params.id) {
+            return (
+              <div key={list.id}>
+                {list.items.map((item) => {
+                  return (
+                    <>
+                      <li
+                        className={
+                          item.isBought
+                            ? `text-decoration-line-through list-unstyled m-3`
+                            : "list-unstyled m-3"
+                        }
+                      >
+                        <input type="checkbox"></input> {item.name}{" "}
+                        <button
+                          className="btn btn-danger"
+                          onClick={() => {
+                            setItemId(item.id);
+                            handleClick(item.id, params.id);
+                          }}
+                        >
+                          Eliminar
+                        </button>
+                      </li>
+                    </>
+                  );
+                })}{" "}
+              </div>
+            );
+          }
         })}
       </ul>
     </div>
